@@ -20,9 +20,159 @@ import {
 } from "lucide-react"
 
 export type PricingFeature = {
+  id: PricingFeatureId
   name: string
   icon: LucideIcon
   badge?: string
+}
+
+export type PricingFeatureId =
+  | "connectedProviders"
+  | "reliableTransfers"
+  | "listGridBrowsing"
+  | "previewMetadata"
+  | "importExportBins"
+  | "versions"
+  | "timelineExports"
+  | "search"
+  | "thumbnailPreviews"
+  | "presentationLinks"
+  | "sharedProjects"
+  | "bulkRename"
+  | "storageInsights"
+  | "customMetadata"
+  | "advancedSharedWorkflows"
+  | "teamMediaContext"
+
+type PricingFeatureDefinition = {
+  icon: LucideIcon
+  defaultName: string
+  badge?: string
+  planLabels?: Partial<Record<PlanId, string>>
+  planIcons?: Partial<Record<PlanId, LucideIcon>>
+}
+
+export const pricingFeatureCatalog: Record<
+  PricingFeatureId,
+  PricingFeatureDefinition
+> = {
+  connectedProviders: {
+    icon: HardDrive,
+    defaultName: "Storage providers",
+    planLabels: {
+      free: "1 storage provider",
+      pro: "Up to 3 storage providers",
+      studio: "Unlimited storage providers",
+    },
+    planIcons: { studio: Infinity },
+  },
+  reliableTransfers: { icon: Zap, defaultName: "Reliable transfers" },
+  listGridBrowsing: { icon: Grid3x3, defaultName: "List & Grid browsing" },
+  previewMetadata: { icon: Eye, defaultName: "Preview & metadata" },
+  importExportBins: {
+    icon: ArrowUpDown,
+    defaultName: "Import / export from bins",
+  },
+  versions: { icon: History, defaultName: "Versions" },
+  timelineExports: {
+    icon: FileStack,
+    defaultName: "Timeline exports",
+    planLabels: {
+      free: "5 timeline exports",
+      pro: "Unlimited timeline exports",
+      studio: "Unlimited timeline exports",
+    },
+  },
+  search: { icon: Search, defaultName: "Search" },
+  thumbnailPreviews: {
+    icon: ImageIcon,
+    defaultName: "Thumbnail previews",
+  },
+  presentationLinks: {
+    icon: Link2,
+    defaultName: "Presentation links",
+    badge: "Client-ready sharing",
+  },
+  sharedProjects: { icon: Users, defaultName: "Shared Projects" },
+  bulkRename: { icon: Layers3, defaultName: "Bulk Rename" },
+  storageInsights: { icon: BarChart3, defaultName: "Storage Insights" },
+  customMetadata: { icon: Tags, defaultName: "Custom metadata" },
+  advancedSharedWorkflows: {
+    icon: Users,
+    defaultName: "Advanced shared workflows",
+  },
+  teamMediaContext: { icon: FolderOpen, defaultName: "Team media context" },
+}
+
+/** Free card — full base list */
+export const freePlanFeatureIds: PricingFeatureId[] = [
+  "connectedProviders",
+  "reliableTransfers",
+  "listGridBrowsing",
+  "previewMetadata",
+  "importExportBins",
+  "versions",
+  "timelineExports",
+]
+
+/** Pro card — upgrades & Pro-only (not repeating other Free rows) */
+export const proAddonFeatureIds: PricingFeatureId[] = [
+  "connectedProviders",
+  "timelineExports",
+  "search",
+  "thumbnailPreviews",
+  "presentationLinks",
+  "sharedProjects",
+  "bulkRename",
+]
+
+/** Studio card — upgrades & Studio-only */
+export const studioAddonFeatureIds: PricingFeatureId[] = [
+  "connectedProviders",
+  "storageInsights",
+  "customMetadata",
+  "advancedSharedWorkflows",
+  "teamMediaContext",
+]
+
+/**
+ * Toggle visibility per plan list.
+ * `false` hides a row; delete key or `true` to show again.
+ */
+export const planFeatureVisibility: Partial<
+  Record<PlanId, Partial<Record<PricingFeatureId, boolean>>>
+> = {
+  free: {},
+  pro: {},
+  studio: {},
+}
+
+function isFeatureVisible(featureId: PricingFeatureId, planId: PlanId): boolean {
+  const override = planFeatureVisibility[planId]?.[featureId]
+  if (override !== undefined) return override
+  return true
+}
+
+function resolveFeature(
+  featureId: PricingFeatureId,
+  planId: PlanId
+): PricingFeature {
+  const def = pricingFeatureCatalog[featureId]
+  return {
+    id: featureId,
+    name: def.planLabels?.[planId] ?? def.defaultName,
+    icon: def.planIcons?.[planId] ?? def.icon,
+    badge: def.badge,
+  }
+}
+
+function buildFeaturesFromIds(
+  ids: PricingFeatureId[],
+  planId: PlanId
+): PricingFeature[] {
+  return ids
+    .filter((id) => isFeatureVisible(id, planId))
+    .map((id) => resolveFeature(id, planId))
 }
 
 export type PricingPlanConfig = {
@@ -38,63 +188,12 @@ export type PricingPlanConfig = {
   ctaLabel: string
   ctaHref: string
   note?: string
+  /** e.g. "Includes Free" — optional pill above feature list */
+  includesPill?: string
+  /** e.g. "Everything in Free, plus:" — shown before addon features */
+  featuresIntro?: string
   features: PricingFeature[]
 }
-
-/** Free tier — base workflow features. */
-const freeFeatures: PricingFeature[] = [
-  { name: "1 storage provider", icon: HardDrive },
-  { name: "Reliable transfers", icon: Zap },
-  { name: "List & Grid browsing", icon: Grid3x3 },
-  { name: "Preview & metadata", icon: Eye },
-  { name: "Import / export from bins", icon: ArrowUpDown },
-  { name: "Versions", icon: History },
-  { name: "5 timeline exports", icon: FileStack },
-]
-
-/** Pro = Free (upgraded where noted) + professional workflow features. */
-const proFeatures: PricingFeature[] = [
-  { name: "Up to 3 storage providers", icon: HardDrive },
-  { name: "Reliable transfers", icon: Zap },
-  { name: "List & Grid browsing", icon: Grid3x3 },
-  { name: "Preview & metadata", icon: Eye },
-  { name: "Import / export from bins", icon: ArrowUpDown },
-  { name: "Versions", icon: History },
-  { name: "Unlimited timeline exports", icon: FileStack },
-  { name: "Search", icon: Search },
-  { name: "Thumbnail previews", icon: ImageIcon },
-  {
-    name: "Presentation links",
-    icon: Link2,
-    badge: "Client-ready sharing",
-  },
-  { name: "Shared Projects", icon: Users },
-  { name: "Bulk Rename", icon: Layers3 },
-]
-
-/** Studio = Pro (upgraded) + team & storage operations features. */
-const studioFeatures: PricingFeature[] = [
-  { name: "Unlimited storage providers", icon: Infinity },
-  { name: "Reliable transfers", icon: Zap },
-  { name: "List & Grid browsing", icon: Grid3x3 },
-  { name: "Preview & metadata", icon: Eye },
-  { name: "Import / export from bins", icon: ArrowUpDown },
-  { name: "Versions", icon: History },
-  { name: "Unlimited timeline exports", icon: FileStack },
-  { name: "Search", icon: Search },
-  { name: "Thumbnail previews", icon: ImageIcon },
-  {
-    name: "Presentation links",
-    icon: Link2,
-    badge: "Client-ready sharing",
-  },
-  { name: "Shared Projects", icon: Users },
-  { name: "Bulk Rename", icon: Layers3 },
-  { name: "Storage Insights", icon: BarChart3 },
-  { name: "Custom metadata", icon: Tags },
-  { name: "Advanced shared workflows", icon: Users },
-  { name: "Team media context", icon: FolderOpen },
-]
 
 export const pricingPlans: PricingPlanConfig[] = [
   {
@@ -105,7 +204,7 @@ export const pricingPlans: PricingPlanConfig[] = [
     priceSuffix: "forever",
     ctaLabel: "Start Free",
     ctaHref: "/signup?plan=free",
-    features: freeFeatures,
+    features: buildFeaturesFromIds(freePlanFeatureIds, "free"),
   },
   {
     planId: "pro",
@@ -118,7 +217,9 @@ export const pricingPlans: PricingPlanConfig[] = [
     highlighted: true,
     ctaLabel: "Start Pro Trial",
     ctaHref: "/signup?plan=pro",
-    features: proFeatures,
+    includesPill: "Includes Free",
+    featuresIntro: "Everything in Free, plus:",
+    features: buildFeaturesFromIds(proAddonFeatureIds, "pro"),
   },
   {
     planId: "studio",
@@ -130,7 +231,9 @@ export const pricingPlans: PricingPlanConfig[] = [
     badgeStyle: "teams",
     ctaLabel: "Start Studio Trial",
     ctaHref: "/signup?plan=studio",
+    includesPill: "Includes Pro",
+    featuresIntro: "Everything in Pro, plus:",
     note: "Advanced optimization and metadata features depend on provider support.",
-    features: studioFeatures,
+    features: buildFeaturesFromIds(studioAddonFeatureIds, "studio"),
   },
 ]

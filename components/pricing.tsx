@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, Check, Cloud, Info } from "lucide-react"
+import { ArrowRight, Check, Cloud, Info, Plus } from "lucide-react"
 import { cn } from "@/lib/utils"
 import {
   pricingPlans,
@@ -9,6 +9,52 @@ import {
 } from "@/lib/pricing-plans"
 
 type FeatureAccent = "primary" | "teams"
+
+function FeatureIncludesPill({
+  label,
+  accent = "primary",
+}: {
+  label: string
+  accent?: FeatureAccent
+}) {
+  const isTeams = accent === "teams"
+  return (
+    <li className="px-4 pb-1 pt-3">
+      <span
+        className={cn(
+          "inline-flex rounded-full border px-2.5 py-0.5 text-[10px] font-medium",
+          isTeams
+            ? "border-chart-2/25 bg-chart-2/10 text-chart-2"
+            : "border-primary/25 bg-primary/10 text-primary/80"
+        )}
+      >
+        {label}
+      </span>
+    </li>
+  )
+}
+
+function FeatureIntroLine({
+  text,
+  accent = "primary",
+}: {
+  text: string
+  accent?: FeatureAccent
+}) {
+  const isTeams = accent === "teams"
+  return (
+    <li className="flex items-center gap-2 border-b border-white/[0.06] px-4 py-2.5">
+      <Plus
+        className={cn(
+          "h-3.5 w-3.5 shrink-0",
+          isTeams ? "text-chart-2/70" : "text-primary/70"
+        )}
+        aria-hidden
+      />
+      <span className="text-xs font-medium text-muted-foreground">{text}</span>
+    </li>
+  )
+}
 
 function FeatureItem({
   feature,
@@ -21,7 +67,7 @@ function FeatureItem({
   const isTeams = accent === "teams"
 
   return (
-    <li className="flex min-h-[44px] items-center gap-3 px-4 py-2.5">
+    <li className="flex min-h-[40px] items-center gap-3 px-4 py-2">
       <Icon
         className={cn("h-4 w-4 shrink-0", isTeams ? "text-chart-2" : "text-primary")}
         aria-hidden
@@ -94,7 +140,7 @@ function PricingCard({ plan }: { plan: PricingPlanConfig }) {
         />
       )}
 
-      <div className="relative p-5">
+      <div className="relative flex min-h-[220px] flex-col p-5">
         <h3 className="text-lg font-semibold text-foreground">{plan.name}</h3>
         <p className="mt-1 min-h-10 text-sm leading-snug text-muted-foreground">
           {plan.subtitle}
@@ -131,8 +177,14 @@ function PricingCard({ plan }: { plan: PricingPlanConfig }) {
       </div>
 
       <ul className="relative flex flex-1 flex-col border-t border-white/[0.06] py-1">
+        {plan.includesPill && (
+          <FeatureIncludesPill label={plan.includesPill} accent={featureAccent} />
+        )}
+        {plan.featuresIntro && (
+          <FeatureIntroLine text={plan.featuresIntro} accent={featureAccent} />
+        )}
         {plan.features.map((feature) => (
-          <FeatureItem key={feature.name} feature={feature} accent={featureAccent} />
+          <FeatureItem key={feature.id} feature={feature} accent={featureAccent} />
         ))}
       </ul>
 
