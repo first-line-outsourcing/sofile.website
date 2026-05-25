@@ -7,6 +7,7 @@ import { StorageInsights } from "@/components/storage-insights"
 import { DailyOps } from "@/components/daily-ops"
 import { TrustLogos } from "@/components/trust-logos"
 import { Pricing } from "@/components/pricing"
+import { ProviderCapabilities } from "@/components/provider-capabilities"
 import { FAQ } from "@/components/faq"
 import { Footer } from "@/components/footer"
 
@@ -22,6 +23,7 @@ export default function SofileLanding() {
       <DailyOps />
       <TrustLogos />
       <Pricing />
+      <ProviderCapabilities />
       <FAQ />
       <Footer />
     </main>

@@ -69,12 +69,12 @@ export function StorageInsights() {
   return (
     <section id="insights" className="relative py-16 md:py-20">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="mx-auto mb-8 max-w-3xl text-center md:mb-10">
+        <div className="mx-auto mb-8 max-w-4xl text-center md:mb-10">
           <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-border/50 bg-secondary/50 px-4 py-1.5 text-sm text-muted-foreground">
             Storage Insights
           </div>
           <h2 className="text-balance text-3xl font-bold tracking-tight text-foreground md:text-4xl">
-            Find storage waste before it becomes a bill.
+            Find storage waste, duplicates, large files, <br/>and provider-specific optimization opportunities.
           </h2>
           <p className="mt-3 text-pretty text-muted-foreground md:text-base">
             Sofile analyzes your indexed buckets to surface duplicate files, large assets, old media, and storage class opportunities where supported.
@@ -89,6 +89,10 @@ export function StorageInsights() {
             className="h-auto w-full object-cover"
             priority={false}
           />
+
+          <p className="mt-3 text-pretty text-muted-foreground md:text-base text-center">
+            Example: Storage Class Optimization for Amazon S3
+          </p>
       </div>
     </section>
   )

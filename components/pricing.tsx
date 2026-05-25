@@ -1,241 +1,202 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Check, Minus, ArrowRight } from "lucide-react"
+import { ArrowRight, Check, Cloud, Info } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { signupHref, type PlanId } from "@/lib/signup-plans"
+import {
+  pricingPlans,
+  type PricingFeature,
+  type PricingPlanConfig,
+} from "@/lib/pricing-plans"
 
-const FEATURE_LABELS = [
-  "Cloud providers",
-  "File browsing",
-  "Search",
-  "Previews",
-  "Timeline import",
-  "Share Project",
-  "Reliable transfers",
-  "Storage Insights",
-  "Duplicate cleanup",
-  "Metadata indexing",
-  "Bulk actions",
-] as const
+type FeatureAccent = "primary" | "teams"
 
-type PlanFeature = {
-  value: string
-  included: boolean
-}
-
-type PricingPlan = {
-  planId: PlanId
-  name: string
-  subtitle: string
-  price: string
-  period?: string
-  badge?: string
-  badgeStyle?: "popular" | "teams"
-  highlighted?: boolean
-  ctaLabel: string
-  features: PlanFeature[]
-  note?: string
-}
-
-const plans: PricingPlan[] = [
-  {
-    planId: "free",
-    name: "Free",
-    subtitle: "For trying Sofile with one cloud connection.",
-    price: "$0",
-    ctaLabel: "Start Free",
-    features: [
-      { value: "1 provider", included: true },
-      { value: "Basic", included: true },
-      { value: "Basic", included: true },
-      { value: "Thumbnails", included: true },
-      { value: "Included", included: true },
-      { value: "", included: false },
-      { value: "", included: false },
-      { value: "", included: false },
-      { value: "", included: false },
-      { value: "", included: false },
-      { value: "", included: false },
-    ],
-  },
-  {
-    planId: "pro",
-    name: "Pro",
-    subtitle: "For solo editors and freelancers.",
-    price: "$25",
-    period: "/month",
-    badge: "Popular",
-    badgeStyle: "popular",
-    highlighted: true,
-    ctaLabel: "Start Pro Trial",
-    features: [
-      { value: "Unlimited", included: true },
-      { value: "Advanced", included: true },
-      { value: "Advanced", included: true },
-      { value: "Video, audio, metadata", included: true },
-      { value: "Included", included: true },
-      { value: "Included", included: true },
-      { value: "Reliable queue", included: true },
-      { value: "", included: false },
-      { value: "", included: false },
-      { value: "Basic", included: true },
-      { value: "Basic", included: true },
-    ],
-  },
-  {
-    planId: "studio",
-    name: "Studio",
-    subtitle: "For studios managing cloud media and storage costs.",
-    price: "$99",
-    period: "/month",
-    badge: "Best for teams",
-    badgeStyle: "teams",
-    ctaLabel: "Start Studio Trial",
-    note: "Optimization features depend on provider capabilities.",
-    features: [
-      { value: "Unlimited", included: true },
-      { value: "Advanced", included: true },
-      { value: "Advanced", included: true },
-      { value: "Video, audio, metadata", included: true },
-      { value: "Included", included: true },
-      { value: "Team-ready", included: true },
-      { value: "Reliable queue", included: true },
-      { value: "Included", included: true },
-      { value: "Included", included: true },
-      { value: "Advanced", included: true },
-      { value: "Advanced", included: true },
-    ],
-  },
-]
-
-function FeatureRow({
-  label,
-  value,
-  included,
+function FeatureItem({
+  feature,
+  accent = "primary",
 }: {
-  label: string
-  value: string
-  included: boolean
+  feature: PricingFeature
+  accent?: FeatureAccent
 }) {
+  const Icon = feature.icon
+  const isTeams = accent === "teams"
+
   return (
-    <div className="grid min-h-[44px] grid-cols-[1fr_auto] items-center gap-3 border-b border-white/[0.06] px-4 py-2.5 last:border-b-0">
-      <span className="text-xs text-muted-foreground">{label}</span>
-      <div className="flex items-center justify-end gap-1.5 text-right">
-        {included ? (
-          <Check className="h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />
-        ) : (
-          <Minus className="h-3.5 w-3.5 shrink-0 text-muted-foreground/40" aria-hidden />
+    <li className="flex min-h-[44px] items-center gap-3 px-4 py-2.5">
+      <Icon
+        className={cn("h-4 w-4 shrink-0", isTeams ? "text-chart-2" : "text-primary")}
+        aria-hidden
+      />
+      <span className="flex min-w-0 flex-1 flex-wrap items-center gap-2">
+        <span className="text-sm leading-snug text-foreground/90">{feature.name}</span>
+        {feature.badge && (
+          <span
+            className={cn(
+              "shrink-0 rounded-full px-2 py-0.5 text-[10px] font-medium leading-none",
+              isTeams
+                ? "bg-chart-2/15 text-chart-2"
+                : "bg-primary/15 text-primary/75"
+            )}
+          >
+            {feature.badge}
+          </span>
         )}
-        <span
-          className={cn(
-            "text-xs leading-snug",
-            included ? "text-foreground/90" : "text-muted-foreground"
-          )}
-        >
-          {value}
-        </span>
-      </div>
-    </div>
+      </span>
+      <Check
+        className={cn("h-3.5 w-3.5 shrink-0", isTeams ? "text-chart-2" : "text-primary")}
+        aria-hidden
+      />
+    </li>
   )
 }
 
-function PricingCard({ plan }: { plan: PricingPlan }) {
+function FloatingPlanBadge({
+  label,
+  variant,
+}: {
+  label: string
+  variant: "popular" | "teams"
+}) {
+  return (
+    <span
+      className={cn(
+        "whitespace-nowrap rounded-full px-3.5 py-1 text-xs font-medium",
+        variant === "popular" &&
+          "bg-gradient-to-b from-primary to-primary/85 text-primary-foreground shadow-[0_0_20px_rgba(59,130,246,0.5)]",
+        variant === "teams" &&
+          "border border-chart-2/35 bg-background text-chart-2 ring-background shadow-[0_0_16px_rgba(0,188,162,0.2)]"
+      )}
+    >
+      {label}
+    </span>
+  )
+}
+
+function PricingCard({ plan }: { plan: PricingPlanConfig }) {
   const isPopular = plan.highlighted
   const isStudio = plan.badgeStyle === "teams"
+  const featureAccent: FeatureAccent = isStudio ? "teams" : "primary"
 
   return (
     <article
       className={cn(
-        "relative flex h-full flex-col overflow-hidden rounded-2xl border backdrop-blur-xl transition-colors",
+        "relative flex h-full w-full flex-col overflow-hidden rounded-2xl border backdrop-blur-xl transition-colors",
         isPopular &&
-          "border-primary/50 bg-card/50 shadow-lg shadow-primary/10",
+          "border-primary/60 bg-card/50 shadow-[0_0_48px_rgba(59,130,246,0.22)] ring-1 ring-primary/30",
         isStudio &&
-          !isPopular &&
-          "border-chart-2/25 bg-gradient-to-b from-white/[0.03] to-transparent",
+          "border-chart-2/30 bg-gradient-to-b from-white/[0.03] to-transparent",
         !isPopular && !isStudio && "border-white/10 bg-white/[0.02]"
       )}
     >
-      {plan.badge && (
+      {isPopular && (
         <div
-          className={cn(
-            "absolute right-0 top-0 rounded-bl-xl px-3 py-1 text-xs font-medium",
-            plan.badgeStyle === "popular" &&
-              "bg-primary text-primary-foreground",
-            plan.badgeStyle === "teams" &&
-              "border-l border-b border-chart-2/20 bg-chart-2/10 text-chart-2"
-          )}
-        >
-          {plan.badge}
-        </div>
+          className="pointer-events-none absolute inset-0 rounded-2xl bg-primary/[0.06]"
+          aria-hidden
+        />
       )}
 
-      <div className="border-b border-white/[0.06] p-5 pt-6">
+      <div className="relative p-5">
         <h3 className="text-lg font-semibold text-foreground">{plan.name}</h3>
-        <p className="mt-1 min-h-[40px] text-sm leading-snug text-muted-foreground">
+        <p className="mt-1 min-h-10 text-sm leading-snug text-muted-foreground">
           {plan.subtitle}
         </p>
-        <div className="mt-4 flex items-baseline gap-0.5">
+        <div className="mt-4 flex flex-wrap items-baseline gap-x-1 gap-y-0.5">
           <span className="text-3xl font-bold tracking-tight text-foreground">
             {plan.price}
           </span>
           {plan.period && (
             <span className="text-sm text-muted-foreground">{plan.period}</span>
           )}
-        </div>
-      </div>
-
-      <div className="flex flex-1 flex-col">
-        <div className="flex-1 py-1">
-          {plan.features.map((feature, index) => (
-            <FeatureRow
-              key={FEATURE_LABELS[index]}
-              label={FEATURE_LABELS[index]}
-              value={feature.value}
-              included={feature.included}
-            />
-          ))}
+          {plan.priceSuffix && (
+            <span className="text-sm text-muted-foreground">{plan.priceSuffix}</span>
+          )}
         </div>
 
-        {plan.note && (
-          <p className="border-t border-white/[0.06] px-4 py-3 text-[11px] leading-relaxed text-muted-foreground">
-            {plan.note}
-          </p>
-        )}
-
-        <div className="mt-auto border-t border-white/[0.06] p-4">
+        <div className="mt-5">
           <Button
             className={cn(
               "w-full",
               isPopular && "bg-primary text-primary-foreground hover:bg-primary/90",
               isStudio &&
-                !isPopular &&
-                "border border-chart-2/30 bg-chart-2/10 text-chart-2 hover:bg-chart-2/15",
+                "border border-chart-2/35 bg-chart-2/10 text-chart-2 hover:bg-chart-2/15",
               !isPopular &&
                 !isStudio &&
-                "bg-secondary text-foreground hover:bg-secondary/80"
+                "border border-white/15 bg-transparent text-foreground hover:bg-white/[0.04]"
             )}
-            variant={isStudio && !isPopular ? "outline" : "default"}
+            variant={isPopular ? "default" : "outline"}
             asChild
           >
-            <Link href={signupHref(plan.planId)}>{plan.ctaLabel}</Link>
+            <Link href={plan.ctaHref}>{plan.ctaLabel}</Link>
           </Button>
         </div>
       </div>
+
+      <ul className="relative flex flex-1 flex-col border-t border-white/[0.06] py-1">
+        {plan.features.map((feature) => (
+          <FeatureItem key={feature.name} feature={feature} accent={featureAccent} />
+        ))}
+      </ul>
+
+      {plan.note && (
+        <p className="flex gap-2 border-t border-white/[0.06] px-4 py-3 text-[11px] leading-relaxed text-muted-foreground">
+          <Info className="mt-0.5 h-3.5 w-3.5 shrink-0 text-chart-2/80" aria-hidden />
+          <span>{plan.note}</span>
+        </p>
+      )}
     </article>
+  )
+}
+
+function PricingCardSlot({ plan }: { plan: PricingPlanConfig }) {
+  const hasFloatingBadge =
+    plan.badge && (plan.highlighted || plan.badgeStyle === "teams")
+
+  if (!hasFloatingBadge) {
+    return (
+      <div className="h-full">
+        <PricingCard plan={plan} />
+      </div>
+    )
+  }
+
+  const badgeVariant = plan.badgeStyle === "teams" ? "teams" : "popular"
+
+  return (
+    <div className="relative h-full">
+      <div className="absolute left-1/2 top-0 z-10 -translate-x-1/2 -translate-y-1/2">
+        <FloatingPlanBadge label={plan.badge!} variant={badgeVariant} />
+      </div>
+      <PricingCard plan={plan} />
+    </div>
+  )
+}
+
+function PricingProviderNote() {
+  return (
+    <div className="mt-8 flex flex-col items-center gap-2 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-4 text-center sm:flex-row sm:justify-center sm:gap-3 sm:text-left">
+      <Cloud className="mx-auto h-4 w-4 shrink-0 text-muted-foreground sm:mx-0" aria-hidden />
+      <p className="text-sm text-muted-foreground">
+        Some advanced features are available only for supported S3-compatible storage providers.{" "}
+        <Link
+          href="#provider-capabilities"
+          className="inline-flex items-center gap-1 font-medium text-primary hover:underline"
+        >
+          See supported providers
+          <ArrowRight className="h-3.5 w-3.5" />
+        </Link>
+      </p>
+    </div>
   )
 }
 
 function EnterpriseContactRow() {
   return (
-    <div className="mt-8 rounded-2xl border border-white/10 bg-white/[0.02] p-5 md:p-6">
+    <div className="mt-6 rounded-2xl border border-white/10 bg-white/[0.02] p-5 md:p-6">
       <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
         <div>
-          <h3 className="font-semibold text-foreground">
-            Enterprise & Partners
-          </h3>
+          <h3 className="font-semibold text-foreground">Enterprise & Partners</h3>
           <p className="mt-1 text-sm text-muted-foreground">
-            For larger teams, vendors, and storage providers. <br/>
-            SSO, white-label panels, custom integrations, and dedicated support.
+            For larger teams, vendors, and storage providers. SSO, white-label panels,
+            custom integrations, and dedicated support.
           </p>
         </div>
         <Button
@@ -262,19 +223,20 @@ export function Pricing() {
             Pricing
           </div>
           <h2 className="text-balance text-3xl font-bold tracking-tight text-foreground md:text-4xl">
-            Start free, scale when ready.
+            Choose your workflow
           </h2>
           <p className="mt-3 text-pretty text-muted-foreground md:text-base">
-            No hidden fees. Cancel anytime.
+            From personal editing workflows to studio-scale media operations.
           </p>
         </div>
 
-        <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {plans.map((plan) => (
-            <PricingCard key={plan.name} plan={plan} />
+        <div className="mt-10 grid items-start gap-4 overflow-visible pt-6 md:grid-cols-2 lg:grid-cols-3 lg:items-stretch lg:gap-6">
+          {pricingPlans.map((plan) => (
+            <PricingCardSlot key={plan.planId} plan={plan} />
           ))}
         </div>
 
+        <PricingProviderNote />
         <EnterpriseContactRow />
       </div>
     </section>
