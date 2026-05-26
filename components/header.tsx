@@ -45,9 +45,6 @@ export function Header() {
         </nav>
 
         <div className="hidden items-center gap-3 md:flex">
-          <Button variant="ghost" className="text-muted-foreground hover:text-foreground" asChild>
-            <Link href="/login">Log in</Link>
-          </Button>
           <Button className="bg-primary text-primary-foreground hover:bg-primary/90" asChild>
             <Link href={signupHref("free")}>Start Free</Link>
           </Button>
@@ -87,9 +84,6 @@ export function Header() {
               Docs
             </Link>
             <div className="mt-4 flex flex-col gap-2 border-t border-border/50 pt-4">
-              <Button variant="ghost" className="w-full justify-start text-muted-foreground" asChild>
-                <Link href="/login">Log in</Link>
-              </Button>
               <Button className="w-full bg-primary text-primary-foreground" asChild>
                 <Link href={signupHref("free")}>Start Free</Link>
               </Button>

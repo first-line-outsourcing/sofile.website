@@ -204,26 +204,6 @@ export function ProviderCapabilities() {
           ))}
         </div>
 
-        <div className="mx-auto mt-10 max-w-3xl rounded-xl border border-white/[0.08] bg-white/[0.02] p-5 md:p-6">
-          <div className="flex gap-3">
-            <Info className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
-            <div>
-              <h3 className="text-sm font-semibold text-foreground">Important Note</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                Some advanced features like Storage Insights, Sidecar Metadata, and
-                Advanced Optimization are available only for S3-compatible storage
-                providers. Available actions may also vary by provider capabilities.
-              </p>
-              <Link
-                href="#provider-capabilities"
-                className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
-              >
-                See supported providers
-                <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
   )

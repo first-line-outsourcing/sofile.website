@@ -51,7 +51,9 @@ export function SignupForm() {
 
   return (
     <div className="mt-10 grid gap-8 lg:grid-cols-[1fr_340px] lg:items-start lg:gap-10">
+      {/* Form column */}
       <div className="order-2 lg:order-1">
+        {/* Plan card visible only on mobile (above form) */}
         <PlanCard plan={plan} className="lg:hidden" />
 
         <div className="mt-6 lg:mt-0">
@@ -60,7 +62,7 @@ export function SignupForm() {
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="email">Work email</Label>
+            <Label htmlFor="email">Email</Label>
             <Input
               id="email"
               name="email"
@@ -72,39 +74,25 @@ export function SignupForm() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="name">Name</Label>
-            <Input id="name" name="name" autoComplete="name" placeholder="Your name" required />
+            <Label htmlFor="password">Password</Label>
+            <Input
+              id="password"
+              name="password"
+              type="password"
+              autoComplete="new-password"
+              required
+            />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="company">
-              Company / studio name{" "}
-              <span className="font-normal text-muted-foreground">(optional)</span>
-            </Label>
-            <Input id="company" name="company" autoComplete="organization" />
-          </div>
-
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="new-password"
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="confirmPassword">Confirm password</Label>
-              <Input
-                id="confirmPassword"
-                name="confirmPassword"
-                type="password"
-                autoComplete="new-password"
-                required
-              />
-            </div>
+            <Label htmlFor="confirmPassword">Confirm password</Label>
+            <Input
+              id="confirmPassword"
+              name="confirmPassword"
+              type="password"
+              autoComplete="new-password"
+              required
+            />
           </div>
 
           {error && (
@@ -113,24 +101,12 @@ export function SignupForm() {
             </p>
           )}
 
-          <p className="text-xs leading-relaxed text-muted-foreground">
-            Your files stay in your cloud storage. Sofile connects through official
-            provider APIs.
-          </p>
-
           <Button
             type="submit"
             className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
           >
             {plan.ctaLabel}
           </Button>
-
-          <p className="text-center text-sm text-muted-foreground">
-            Already have an account?{" "}
-            <Link href="/login" className="text-primary hover:underline">
-              Log in
-            </Link>
-          </p>
         </form>
 
         <div className="mt-6">
@@ -138,6 +114,7 @@ export function SignupForm() {
         </div>
       </div>
 
+      {/* Plan card column — desktop only */}
       <div className="order-1 hidden lg:order-2 lg:block">
         <PlanCard plan={plan} className="sticky top-24" />
       </div>

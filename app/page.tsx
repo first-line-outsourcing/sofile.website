@@ -1,6 +1,7 @@
 import { Header } from "@/components/header"
 import { HeroSection } from "@/components/hero-section"
 import { HowItWorks } from "@/components/how-it-works"
+import { AdobeCreativeCloudSection } from "@/components/adobe-creative-cloud"
 import { ProblemSolution } from "@/components/problem-solution"
 import { FeatureCards } from "@/components/feature-cards"
 import { StorageInsights } from "@/components/storage-insights"
@@ -17,6 +18,7 @@ export default function SofileLanding() {
       <Header />
       <HeroSection />
       <HowItWorks />
+      <AdobeCreativeCloudSection />
       <ProblemSolution />
       <FeatureCards />
       <StorageInsights />

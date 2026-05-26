@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, Check, Cloud, Info, Plus } from "lucide-react"
+import { ArrowRight, Check, Cloud, Info } from "lucide-react"
 import { cn } from "@/lib/utils"
 import {
   pricingPlans,
@@ -10,48 +10,35 @@ import {
 
 type FeatureAccent = "primary" | "teams"
 
-function FeatureIncludesPill({
-  label,
+function FeatureTierIntro({
+  pill,
+  intro,
   accent = "primary",
 }: {
-  label: string
+  pill?: string
+  intro?: string
   accent?: FeatureAccent
 }) {
   const isTeams = accent === "teams"
-  return (
-    <li className="px-4 pb-1 pt-3">
-      <span
-        className={cn(
-          "inline-flex rounded-full border px-2.5 py-0.5 text-[10px] font-medium",
-          isTeams
-            ? "border-chart-2/25 bg-chart-2/10 text-chart-2"
-            : "border-primary/25 bg-primary/10 text-primary/80"
-        )}
-      >
-        {label}
-      </span>
-    </li>
-  )
-}
+  if (!pill && !intro) return null
 
-function FeatureIntroLine({
-  text,
-  accent = "primary",
-}: {
-  text: string
-  accent?: FeatureAccent
-}) {
-  const isTeams = accent === "teams"
   return (
-    <li className="flex items-center gap-2 border-b border-white/[0.06] px-4 py-2.5">
-      <Plus
-        className={cn(
-          "h-3.5 w-3.5 shrink-0",
-          isTeams ? "text-chart-2/70" : "text-primary/70"
-        )}
-        aria-hidden
-      />
-      <span className="text-xs font-medium text-muted-foreground">{text}</span>
+    <li className="flex flex-wrap items-center gap-x-2 gap-y-1 border-b border-white/[0.06] px-4 py-4 pt-3">
+      {pill && (
+        <span
+          className={cn(
+            "inline-flex shrink-0 rounded-full border px-2.5 py-0.5 text-[10px] font-medium",
+            isTeams
+              ? "border-chart-2/25 bg-chart-2/10 text-chart-2"
+              : "border-primary/25 bg-primary/10 text-primary/80"
+          )}
+        >
+          {pill}
+        </span>
+      )}
+      {intro && (
+        <span className="text-xs font-medium text-muted-foreground">{intro}</span>
+      )}
     </li>
   )
 }
@@ -177,11 +164,12 @@ function PricingCard({ plan }: { plan: PricingPlanConfig }) {
       </div>
 
       <ul className="relative flex flex-1 flex-col border-t border-white/[0.06] py-1">
-        {plan.includesPill && (
-          <FeatureIncludesPill label={plan.includesPill} accent={featureAccent} />
-        )}
-        {plan.featuresIntro && (
-          <FeatureIntroLine text={plan.featuresIntro} accent={featureAccent} />
+        {(plan.includesPill || plan.featuresIntro) && (
+          <FeatureTierIntro
+            pill={plan.includesPill}
+            intro={plan.featuresIntro}
+            accent={featureAccent}
+          />
         )}
         {plan.features.map((feature) => (
           <FeatureItem key={feature.id} feature={feature} accent={featureAccent} />

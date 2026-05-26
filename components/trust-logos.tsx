@@ -2,7 +2,6 @@ import Image from "next/image"
 import { Shield, Lock, Eye, Key } from "lucide-react"
 
 const providers = [
-  { name: "Adobe", src: "/images/icons/icon_adobe.svg" },
   { name: "AWS S3", src: "/images/icons/icon_awss3.svg" },
   { name: "Backblaze", src: "/images/icons/icon_backblaze.svg" },
   { name: "Wasabi", src: "/images/icons/icon_wasabi.svg" },
@@ -107,10 +106,10 @@ export function TrustLogos() {
           </div>
         </div>
 
-        {/* Integration logos */}
+        {/* Storage provider logos — Adobe apps covered in #adobe-creative-cloud */}
         <div className="text-center space-y-6">
           <p className="text-sm text-muted-foreground">
-            Built for your existing media workflow
+            Connects to your cloud storage providers
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6">
             {providers.map((provider, i) => (
