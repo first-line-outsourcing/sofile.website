@@ -1,6 +1,17 @@
 import Image from "next/image"
-import Link from "next/link"
-import { ArrowRight, Check, Info, Minus } from "lucide-react"
+import {
+  BarChart3,
+  Check,
+  Info,
+  Layers3,
+  Link2,
+  Minus,
+  Search,
+  Sparkles,
+  Tags,
+  Users,
+  Image as ImageIcon,
+} from "lucide-react"
 import { cn } from "@/lib/utils"
 import {
   capabilityStatusLabels,
@@ -14,13 +25,38 @@ const providerLogos: Partial<Record<ProviderColumnId, { src: string; alt: string
   s3: [
     { src: "/images/icons/icon_awss3.svg", alt: "AWS S3" },
     { src: "/images/icons/icon_backblaze.svg", alt: "Backblaze B2" },
-    { src: "/images/icons/icon_googlecloud.svg", alt: "Google Cloud Storage" },
+    { src: "/images/icons/icon_ibmcos.svg", alt: "IBM COS" },
   ],
+  gcs: [{ src: "/images/icons/icon_gsc.svg", alt: "Google Cloud Storage" }],
   dropbox: [{ src: "/images/icons/icon_dropbox.svg", alt: "Dropbox" }],
+  googleDrive: [{ src: "/images/icons/icon_googledrive.svg", alt: "Google Drive" }],
+  oneDrive: [{ src: "/images/icons/icon_onedrive.svg", alt: "OneDrive" }],
 }
 
 function isPositiveStatus(status: CapabilityStatus): boolean {
   return status !== "notAvailable"
+}
+
+function AvailabilityBadge({ label }: { label: string }) {
+  return (
+    <div className="flex items-center justify-start gap-3">
+      <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-chart-2/40 bg-chart-2/10 text-chart-2 shadow-[0_0_16px_rgba(34,211,238,0.16)]">
+        <Check className="h-3 w-3" aria-hidden />
+      </span>
+      <span className="text-sm leading-snug text-foreground/90">{label}</span>
+    </div>
+  )
+}
+
+function UnavailableBadge() {
+  return (
+    <div className="flex items-center justify-start gap-3 text-muted-foreground">
+      <span className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-white/10 bg-white/5">
+        –
+      </span>
+      <span className="text-sm leading-snug">Not available</span>
+    </div>
+  )
 }
 
 function CapabilityCell({ status }: { status: CapabilityStatus }) {
@@ -28,20 +64,8 @@ function CapabilityCell({ status }: { status: CapabilityStatus }) {
   const positive = isPositiveStatus(status)
 
   return (
-    <div className="flex flex-col items-center gap-1.5 px-2 py-3 text-center sm:px-3">
-      {positive ? (
-        <Check className="h-4 w-4 text-primary" aria-hidden />
-      ) : (
-        <Minus className="h-4 w-4 text-muted-foreground/40" aria-hidden />
-      )}
-      <span
-        className={cn(
-          "text-xs leading-snug",
-          positive ? "text-foreground/90" : "text-muted-foreground"
-        )}
-      >
-        {label}
-      </span>
+    <div className="px-4 py-3 text-left">
+      {positive ? <AvailabilityBadge label={label} /> : <UnavailableBadge />}
     </div>
   )
 }
@@ -58,10 +82,10 @@ function ProviderColumnHeader({
   const logos = providerLogos[columnId]
 
   return (
-    <th className="min-w-[120px] border-b border-white/[0.08] px-2 py-4 text-center align-bottom sm:min-w-[140px]">
-      {logos && logos.length > 0 && (
-        <div className="mb-2 flex items-center justify-center gap-1.5">
-          {logos.map((logo) => (
+    <th className="min-w-[130px] border-b border-r border-white/[0.10] px-2 py-4 text-center align-top sm:min-w-[150px]">
+      <div className="flex flex-col items-center">
+        <div className="flex h-7 items-center justify-center gap-1.5">
+          {logos?.map((logo) => (
             <Image
               key={logo.alt}
               src={logo.src}
@@ -70,15 +94,17 @@ function ProviderColumnHeader({
               height={20}
               className="h-5 w-5 opacity-80"
             />
-          ))}
+          )) ?? null}
         </div>
-      )}
-      <span className="block text-xs font-semibold text-foreground sm:text-sm">{title}</span>
-      {subtext && (
-        <span className="mt-1 block text-[10px] leading-snug text-muted-foreground sm:text-[11px]">
-          {subtext}
+        <span className="mt-1 block text-sm font-semibold text-foreground">
+          {title}
         </span>
-      )}
+        {subtext && (
+          <span className="mt-1 block text-xs leading-snug text-muted-foreground">
+            {subtext}
+          </span>
+        )}
+      </div>
     </th>
   )
 }
@@ -92,10 +118,18 @@ function CapabilityMobileCard({
   description: string
   values: { column: string; status: CapabilityStatus }[]
 }) {
+  const Icon = capabilityIcons[name] ?? Sparkles
   return (
     <article className="rounded-xl border border-white/10 bg-white/[0.02] p-4">
-      <h3 className="text-sm font-semibold text-foreground">{name}</h3>
-      <p className="mt-1 text-xs text-muted-foreground">{description}</p>
+      <div className="flex items-start gap-3">
+        <span className="sofile-glass-check-circle mt-0.5">
+          <Icon className="h-3.5 w-3.5 text-primary/90" aria-hidden />
+        </span>
+        <div>
+          <h3 className="text-sm font-semibold text-foreground">{name}</h3>
+          <p className="mt-1 text-xs text-muted-foreground">{description}</p>
+        </div>
+      </div>
       <ul className="mt-4 space-y-3">
         {values.map(({ column, status }) => (
           <li
@@ -103,21 +137,29 @@ function CapabilityMobileCard({
             className="flex items-center justify-between gap-3 border-t border-white/[0.06] pt-3 first:border-t-0 first:pt-0"
           >
             <span className="text-xs text-muted-foreground">{column}</span>
-            <div className="flex items-center gap-2">
+            <div className="shrink-0">
               {isPositiveStatus(status) ? (
-                <Check className="h-3.5 w-3.5 text-primary" aria-hidden />
+                <AvailabilityBadge label={capabilityStatusLabels[status]} />
               ) : (
-                <Minus className="h-3.5 w-3.5 text-muted-foreground/40" aria-hidden />
+                <UnavailableBadge />
               )}
-              <span className="text-xs text-foreground/90">
-                {capabilityStatusLabels[status]}
-              </span>
             </div>
           </li>
         ))}
       </ul>
     </article>
   )
+}
+
+const capabilityIcons: Record<string, React.ComponentType<{ className?: string; "aria-hidden"?: boolean }>> = {
+  "Instant Search": Search,
+  "Thumbnail Previews": ImageIcon,
+  "Presentation Links": Link2,
+  "Shared Projects": Users,
+  "Storage Insights": BarChart3,
+  "Sidecar Metadata (MAM-lite)": Tags,
+  "Bulk Rename & Normalize": Layers3,
+  "Advanced Optimization": Sparkles,
 }
 
 export function ProviderCapabilities() {
@@ -138,13 +180,13 @@ export function ProviderCapabilities() {
         </div>
 
         {/* Desktop / tablet table */}
-        <div className="mt-10 hidden overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] md:block">
+        <div className="mt-10 hidden overflow-hidden rounded-2xl border border-white/[0.14] bg-white/[0.03] shadow-[0_0_48px_rgba(59,130,246,0.10)] md:block">
           <div className="overflow-x-auto">
             <table className="w-full min-w-[720px] border-collapse text-left">
               <thead>
-                <tr>
-                  <th className="sticky left-0 z-10 min-w-[200px] border-b border-r border-white/[0.08] bg-background/95 px-4 py-4 backdrop-blur-sm">
-                    <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                <tr className="bg-white/[0.03]">
+                  <th className="sticky left-0 z-20 min-w-[220px] border-b border-r border-white/[0.10] bg-white/[0.03] px-4 py-4 backdrop-blur-sm">
+                    <span className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
                       Capability
                     </span>
                   </th>
@@ -162,26 +204,37 @@ export function ProviderCapabilities() {
                 {providerCapabilities.map((row) => (
                   <tr
                     key={row.name}
-                    className="border-b border-white/[0.06] last:border-b-0"
+                    className="hover:bg-white/[0.015]"
                   >
-                    <td className="sticky left-0 z-10 border-r border-white/[0.06] bg-background/95 px-4 py-3 backdrop-blur-sm">
-                      <p className="text-sm font-medium text-foreground">{row.name}</p>
-                      <p className="mt-0.5 text-xs leading-snug text-muted-foreground">
-                        {row.description}
-                      </p>
+                    <td className="sticky left-0 z-10 border-b border-r border-white/[0.06] bg-background/95 px-4 py-3 backdrop-blur-sm">
+                      <div className="flex items-start gap-3">
+                        <span className="sofile-glass-check-circle mt-0.5">
+                          {(() => {
+                            const Icon = capabilityIcons[row.name] ?? Sparkles
+                            return <Icon className="h-4 w-4 text-primary/90" aria-hidden />
+                          })()}
+                        </span>
+                        <div>
+                          <p className="text-[15px] font-semibold leading-snug text-foreground">
+                            {row.name}
+                          </p>
+                          <p className="mt-1 text-sm leading-snug text-muted-foreground">
+                            {row.description}
+                          </p>
+                        </div>
+                      </div>
                     </td>
-                    <td className="border-white/[0.04]">
-                      <CapabilityCell status={row.s3} />
-                    </td>
-                    <td>
-                      <CapabilityCell status={row.dropbox} />
-                    </td>
-                    <td>
-                      <CapabilityCell status={row.googleDrive} />
-                    </td>
-                    <td>
-                      <CapabilityCell status={row.oneDrive} />
-                    </td>
+                    {providerColumns.map((col, colIndex) => (
+                      <td
+                        key={col.id}
+                        className={cn(
+                          "border-b border-white/[0.08]",
+                          colIndex < providerColumns.length - 1 && "border-r border-white/[0.06]"
+                        )}
+                      >
+                        <CapabilityCell status={row[col.id]} />
+                      </td>
+                    ))}
                   </tr>
                 ))}
               </tbody>
