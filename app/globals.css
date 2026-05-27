@@ -147,6 +147,12 @@
     clip-path: inset(0 28% 0 0 round 24px);
   }
 
+  .sofile-storages-panel {
+    background:
+      radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.08), transparent 40%),
+      radial-gradient(circle at 100% 100%, rgba(59, 130, 246, 0.06), transparent 42%);
+  }
+
   .sofile-glass-card {
     position: relative;
     overflow: hidden;

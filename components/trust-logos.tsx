@@ -71,66 +71,9 @@ export function TrustLogos() {
           </div>
         </div>
 
-        {/* Testimonials */}
-        <div className="space-y-6">
-          <p className="mb-5 text-center text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
-            Trusted by editors & studios worldwide
-          </p>
-          <div className="grid gap-4 md:grid-cols-3">
-            {testimonials.map((t, i) => (
-              <article
-                key={i}
-                className="group relative rounded-2xl border border-white/[0.06] bg-card/40 p-5 backdrop-blur-xl transition-colors duration-300 ease-out hover:bg-white/[0.03]"
-              >
-                <p className="relative text-sm leading-relaxed text-foreground/90 md:text-[0.9rem]">
-                  <span className="pointer-events-none absolute -left-1 -top-3 text-3xl text-primary/40">
-                    “
-                  </span>
-                  <span className="pl-3">{t.quote}</span>
-                </p>
-                <div className="mt-4 flex items-center gap-3">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary text-xs font-medium text-muted-foreground">
-                    {t.author.split(' ').map(n => n[0]).join('')}
-                  </div>
-                  <div>
-                    <p className="text-xs font-medium text-foreground">
-                      {t.author}
-                    </p>
-                    <p className="text-[10px] text-muted-foreground">
-                      {t.role}
-                    </p>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
+        {/* Testimonials intentionally hidden for now. */}
 
-        {/* Storage provider logos — Adobe apps covered in #adobe-creative-cloud */}
-        <div className="text-center space-y-6">
-          <p className="text-sm text-muted-foreground">
-            Connects to your cloud storage providers
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6">
-            {providers.map((provider, i) => (
-              <div
-                key={i}
-                className="group flex flex-col items-center gap-1.5 text-muted-foreground transition-all duration-300 ease-out hover:text-foreground"
-              >
-                <div className="flex h-11 w-11 items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.03] transition-all duration-300 ease-out group-hover:scale-105 group-hover:border-primary/40 group-hover:bg-white/[0.06] group-hover:shadow-[0_0_20px_rgba(59,130,246,0.25)]">
-                  <Image
-                    src={provider.src}
-                    alt={provider.name}
-                    width={22}
-                    height={22}
-                    className="h-5 w-5 opacity-85 transition-all duration-300 group-hover:opacity-100 group-hover:brightness-110 group-hover:drop-shadow-[0_0_10px_rgba(59,130,246,0.35)]"
-                  />
-                </div>
-                <span className="text-[10px]">{provider.name}</span>
-              </div>
-            ))}
-          </div>
-        </div>
+        {/* Storage provider logos intentionally hidden for now. */}
       </div>
     </section>
   )
