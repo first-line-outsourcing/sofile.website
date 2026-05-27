@@ -1,0 +1,87 @@
+name: Vercel Deploy
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: vercel-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: read
+
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+jobs:
+  deploy-preview:
+    if: github.event_name == 'pull_request' && github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "pnpm"
+
+      - name: Setup pnpm
+        run: corepack enable
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Vercel CLI
+        run: pnpm dlx vercel --version
+
+      - name: Pull Vercel env (preview)
+        run: pnpm dlx vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build (preview)
+        run: pnpm dlx vercel build --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy (preview)
+        run: pnpm dlx vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
+
+  deploy-production:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "pnpm"
+
+      - name: Setup pnpm
+        run: corepack enable
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Vercel CLI
+        run: pnpm dlx vercel --version
+
+      - name: Pull Vercel env (production)
+        run: pnpm dlx vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build (production)
+        run: pnpm dlx vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy (production)
+        run: pnpm dlx vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
