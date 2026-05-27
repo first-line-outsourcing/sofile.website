@@ -27,7 +27,7 @@ const providerLogos: Partial<Record<ProviderColumnId, { src: string; alt: string
     { src: "/images/icons/icon_backblaze.svg", alt: "Backblaze B2" },
     { src: "/images/icons/icon_ibmcos.svg", alt: "IBM COS" },
   ],
-  gcs: [{ src: "/images/icons/icon_gsc.svg", alt: "Google Cloud Storage" }],
+  gcs: [{ src: "/images/icons/icon_gcs.svg", alt: "Google Cloud Storage" }],
   dropbox: [{ src: "/images/icons/icon_dropbox.svg", alt: "Dropbox" }],
   googleDrive: [{ src: "/images/icons/icon_googledrive.svg", alt: "Google Drive" }],
   oneDrive: [{ src: "/images/icons/icon_onedrive.svg", alt: "OneDrive" }],

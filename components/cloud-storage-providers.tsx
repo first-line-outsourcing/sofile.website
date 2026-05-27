@@ -14,7 +14,7 @@ const storageProviders: StorageProvider[] = [
   { name: "IBM COS", logo: { src: "/images/icons/icon_ibmcos.svg", alt: "IBM COS" } },
   {
     name: "Google Cloud Storage",
-    logo: { src: "/images/icons/icon_gsc.svg", alt: "Google Cloud Storage" },
+    logo: { src: "/images/icons/icon_gcs.svg", alt: "Google Cloud Storage" },
   },
   { name: "Amazon S3", logo: { src: "/images/icons/icon_awss3.svg", alt: "Amazon S3" } },
   {

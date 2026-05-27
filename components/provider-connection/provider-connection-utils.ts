@@ -43,7 +43,7 @@ export function getProviderLogo(provider: string | null): { src: string; alt: st
     case "backblaze-b2":
       return { src: "/images/icons/icon_backblaze.svg", alt: "Backblaze B2" }
     case "gcs":
-      return { src: "/images/icons/icon_gsc.svg", alt: "Google Cloud Storage" }
+      return { src: "/images/icons/icon_gcs.svg", alt: "Google Cloud Storage" }
     case "ibm-cos":
       return { src: "/images/icons/icon_ibmcos.svg", alt: "IBM COS" }
     default:
