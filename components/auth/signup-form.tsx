@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label"
 import { PlanCard } from "@/components/auth/plan-card"
 import { PlanSwitcher } from "@/components/auth/plan-switcher"
 import { TrustBlock } from "@/components/auth/trust-block"
-import { getPlanFromQuery, signupPlans } from "@/lib/signup-plans"
+import { getPlanFromQuery, signupPlans } from "@/lib/plans"
 
 export function SignupPageHeader() {
   return (

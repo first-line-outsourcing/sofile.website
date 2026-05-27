@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { signupHref } from "@/lib/signup-plans"
+import { signupHref } from "@/lib/plans"
 import { ArrowRight, Play, Check } from "lucide-react"
 import Image from "next/image"
 import { useEffect, useState } from "react"
@@ -108,7 +108,7 @@ export function HeroSection() {
               `}
               asChild
             >
-              <Link href={signupHref("free")}>Start Free</Link>
+              <Link href={signupHref("free")} target="_blank" rel="noopener noreferrer">Install Free on Adobe Exchange</Link>
             </Button>
 
             <Button

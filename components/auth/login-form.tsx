@@ -5,7 +5,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { signupHref } from "@/lib/signup-plans"
+import { signupHref } from "@/lib/plans"
 
 export function LoginPageHeader() {
   return (
@@ -70,7 +70,7 @@ export function LoginForm() {
 
       <p className="text-center text-sm text-muted-foreground">
         New to Sofile?{" "}
-        <Link href={signupHref("free")} className="text-primary hover:underline">
+        <Link href={signupHref("free")} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
           Start Free
         </Link>
       </p>

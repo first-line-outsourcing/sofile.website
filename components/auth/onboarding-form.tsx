@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import { getPlanFromQuery } from "@/lib/signup-plans"
+import { getPlanFromQuery } from "@/lib/plans"
 import {
   oauthProviders,
   credentialsProviders,

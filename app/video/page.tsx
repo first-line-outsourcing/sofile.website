@@ -1,6 +1,8 @@
+import Link from "next/link"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
+import { ADOBE_EXCHANGE_URL } from "@/lib/plans"
 import { ArrowRight, Check, Download, Upload, Share2, Users, Building2, Tv } from "lucide-react"
 
 export default function VideoPage() {
@@ -30,9 +32,11 @@ export default function VideoPage() {
           </p>
 
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Button size="lg" className="w-full gap-2 bg-primary text-primary-foreground hover:bg-primary/90 sm:w-auto">
-              Start Free
-              <ArrowRight className="h-4 w-4" />
+            <Button size="lg" className="w-full gap-2 bg-primary text-primary-foreground hover:bg-primary/90 sm:w-auto" asChild>
+              <Link href={ADOBE_EXCHANGE_URL} target="_blank" rel="noopener noreferrer">
+                Start Free
+                <ArrowRight className="h-4 w-4" />
+              </Link>
             </Button>
           </div>
 
@@ -241,9 +245,11 @@ export default function VideoPage() {
               Join video editors who've eliminated browser tabs, manual downloads, and Media Offline errors from their daily work.
             </p>
             <div className="mt-6">
-              <Button size="lg" className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90">
-                Start Free
-                <ArrowRight className="h-4 w-4" />
+              <Button size="lg" className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90" asChild>
+                <Link href={ADOBE_EXCHANGE_URL} target="_blank" rel="noopener noreferrer">
+                  Start Free
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
               </Button>
             </div>
             <p className="mt-3 text-sm text-muted-foreground">

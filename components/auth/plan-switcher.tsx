@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname, useSearchParams } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { planOrder, signupPlans, type PlanId } from "@/lib/signup-plans"
+import { planOrder, signupPlans, type PlanId } from "@/lib/plans"
 
 export function PlanSwitcher({ activePlan }: { activePlan: PlanId }) {
   const pathname = usePathname()

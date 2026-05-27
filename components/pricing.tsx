@@ -6,7 +6,7 @@ import {
   pricingPlans,
   type PricingFeature,
   type PricingPlanConfig,
-} from "@/lib/pricing-plans"
+} from "@/lib/plans"
 
 type FeatureAccent = "primary" | "teams"
 
@@ -106,8 +106,8 @@ function FloatingPlanBadge({
 
 function PricingCard({ plan }: { plan: PricingPlanConfig }) {
   const isPopular = plan.highlighted
-  const isStudio = plan.badgeStyle === "teams"
-  const featureAccent: FeatureAccent = isStudio ? "teams" : "primary"
+  const isExpert = plan.badgeStyle === "teams"
+  const featureAccent: FeatureAccent = isExpert ? "teams" : "primary"
 
   return (
     <article
@@ -115,9 +115,9 @@ function PricingCard({ plan }: { plan: PricingPlanConfig }) {
         "relative flex h-full w-full flex-col overflow-hidden rounded-2xl border backdrop-blur-xl transition-colors",
         isPopular &&
           "border-primary/60 bg-card/50 shadow-[0_0_48px_rgba(59,130,246,0.22)] ring-1 ring-primary/30",
-        isStudio &&
+        isExpert &&
           "border-chart-2/30 bg-gradient-to-b from-white/[0.03] to-transparent",
-        !isPopular && !isStudio && "border-white/10 bg-white/[0.02]"
+        !isPopular && !isExpert && "border-white/10 bg-white/[0.02]"
       )}
     >
       {isPopular && (
@@ -149,16 +149,16 @@ function PricingCard({ plan }: { plan: PricingPlanConfig }) {
             className={cn(
               "w-full",
               isPopular && "bg-primary text-primary-foreground hover:bg-primary/90",
-              isStudio &&
+              isExpert &&
                 "border border-chart-2/35 bg-chart-2/10 text-chart-2 hover:bg-chart-2/15",
               !isPopular &&
-                !isStudio &&
+                !isExpert &&
                 "border border-white/15 bg-transparent text-foreground hover:bg-white/[0.04]"
             )}
             variant={isPopular ? "default" : "outline"}
             asChild
           >
-            <Link href={plan.ctaHref}>{plan.ctaLabel}</Link>
+            <Link href={plan.ctaHref} target="_blank" rel="noopener noreferrer">{plan.ctaLabel}</Link>
           </Button>
         </div>
       </div>
@@ -263,7 +263,7 @@ export function Pricing() {
             Pricing
           </div>
           <h2 className="text-balance text-3xl font-bold tracking-tight text-foreground md:text-4xl">
-            Choose your workflow
+            Choose your plan
           </h2>
           <p className="mt-3 text-pretty text-muted-foreground md:text-base">
             From personal editing workflows to studio-scale media operations.

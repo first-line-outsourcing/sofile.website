@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { signupHref } from "@/lib/signup-plans"
+import { signupHref } from "@/lib/plans"
 import { Menu, X } from "lucide-react"
 import Image from "next/image"
 
@@ -46,7 +46,7 @@ export function Header() {
 
         <div className="hidden items-center gap-3 md:flex">
           <Button className="bg-primary text-primary-foreground hover:bg-primary/90" asChild>
-            <Link href={signupHref("free")}>Start Free</Link>
+            <Link href={signupHref("free")} target="_blank" rel="noopener noreferrer">Install Free on Adobe Exchange</Link>
           </Button>
         </div>
 
@@ -85,7 +85,7 @@ export function Header() {
             </Link>
             <div className="mt-4 flex flex-col gap-2 border-t border-border/50 pt-4">
               <Button className="w-full bg-primary text-primary-foreground" asChild>
-                <Link href={signupHref("free")}>Start Free</Link>
+                <Link href={signupHref("free")} target="_blank" rel="noopener noreferrer">Install Free on Adobe Exchange</Link>
               </Button>
             </div>
           </nav>

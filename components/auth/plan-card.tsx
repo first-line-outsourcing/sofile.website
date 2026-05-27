@@ -1,6 +1,6 @@
 import { Check } from "lucide-react"
 import { cn } from "@/lib/utils"
-import type { SignupPlan } from "@/lib/signup-plans"
+import type { SignupPlan } from "@/lib/plans"
 
 export function PlanCard({
   plan,
@@ -9,7 +9,7 @@ export function PlanCard({
   plan: SignupPlan
   className?: string
 }) {
-  const isStudio = plan.id === "studio"
+  const isExpert = plan.id === "expert"
   const isPro = plan.id === "pro"
 
   return (
@@ -17,7 +17,7 @@ export function PlanCard({
       className={cn(
         "rounded-2xl border border-white/10 bg-white/[0.02] p-5 backdrop-blur-xl md:p-6",
         isPro && "border-primary/40 bg-card/40",
-        isStudio && "border-chart-2/25 bg-gradient-to-b from-white/[0.03] to-transparent",
+        isExpert && "border-chart-2/25 bg-gradient-to-b from-white/[0.03] to-transparent",
         className
       )}
     >
@@ -49,7 +49,7 @@ export function PlanCard({
             <Check
               className={cn(
                 "mt-0.5 h-3.5 w-3.5 shrink-0",
-                isStudio ? "text-chart-2" : "text-primary"
+                isExpert ? "text-chart-2" : "text-primary"
               )}
               aria-hidden
             />

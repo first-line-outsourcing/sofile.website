@@ -1,7 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import { signupHref } from "@/lib/signup-plans"
+import { signupHref } from "@/lib/plans"
 import { ArrowRight } from "lucide-react"
 
 const footerLinks = {
@@ -44,8 +44,8 @@ export function Footer() {
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Button size="lg" className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90" asChild>
-              <Link href={signupHref("free")}>
-                Start Free
+              <Link href={signupHref("free")} target="_blank" rel="noopener noreferrer">
+                Install Free on Adobe Exchange
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>
