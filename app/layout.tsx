@@ -8,7 +8,7 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'Sofile — Your Cloud Storage. Native in Adobe.',
+  title: 'Sofile - Your Cloud Storage. Native in Adobe.',
   description: 'Search, preview, and edit media from S3, Backblaze, or Dropbox without leaving your creative apps. The intelligent layer between cloud storage and Adobe Creative Cloud.',
   generator: 'v0.app',
   icons: {

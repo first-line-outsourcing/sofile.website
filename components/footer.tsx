@@ -8,25 +8,25 @@ const footerLinks = {
   Product: [
     { label: "Features", href: "#features" },
     { label: "Pricing", href: "#pricing" },
-    { label: "Integrations", href: "#" },
-    { label: "Changelog", href: "#" },
+    // { label: "Integrations", href: "#" },
+    // { label: "Changelog", href: "#" },
   ],
   Resources: [
-    { label: "Documentation", href: "#" },
-    { label: "API Reference", href: "#" },
+    // { label: "Documentation", href: "#" },
+    // { label: "API Reference", href: "#" },
     { label: "Tutorials", href: "#" },
     { label: "Blog", href: "#" },
   ],
-  Company: [
-    { label: "About", href: "#" },
-    { label: "Careers", href: "#" },
-    { label: "Contact", href: "#" },
-    { label: "Press", href: "#" },
-  ],
+  // Company: [
+  //   { label: "About", href: "#" },
+  //   { label: "Careers", href: "#" },
+  //   { label: "Contact", href: "#" },
+  //   { label: "Press", href: "#" },
+  // ],
   Legal: [
-    { label: "Privacy", href: "#" },
-    { label: "Terms", href: "#" },
-    { label: "Security", href: "#" },
+    { label: "Privacy", href: "/privacy" },
+    { label: "Terms", href: "/terms" },
+    // { label: "Security", href: "#" },
   ],
 }
 
@@ -59,7 +59,7 @@ export function Footer() {
       {/* Footer links */}
       <div className="border-t border-border/50">
         <div className="mx-auto max-w-7xl px-6 py-12">
-          <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-5">
+          <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-4">
             <div className="md:col-span-1">
               <Link href="/" className="flex items-center gap-2">
                 <Image
@@ -98,14 +98,14 @@ export function Footer() {
               {new Date().getFullYear()} Sofile. All rights reserved.
             </p>
             <div className="flex items-center gap-6">
-              <Link href="#" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
-                Twitter
+              <Link href="https://www.linkedin.com/company/sofileio" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+                LinkedIn
               </Link>
               <Link href="#" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
-                GitHub
+                Facebook
               </Link>
-              <Link href="#" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
-                Discord
+              <Link href="https://www.instagram.com/sofileio" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+                Instagram
               </Link>
             </div>
           </div>

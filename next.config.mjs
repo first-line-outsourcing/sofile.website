@@ -6,6 +6,12 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  async rewrites() {
+    return [
+      { source: "/privacy", destination: "/legal/privacy.pdf" },
+      { source: "/terms", destination: "/legal/terms.pdf" },
+    ]
+  },
 }
 
 export default nextConfig

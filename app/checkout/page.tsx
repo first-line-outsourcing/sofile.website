@@ -40,11 +40,10 @@ function CheckoutFooter() {
   return (
     <footer className="border-t border-border/50 py-6">
       <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-muted-foreground">
-        {/* TODO: replace with real policy page URLs */}
-        <Link href="#" className="hover:text-foreground">
+        <Link href="/terms" className="hover:text-foreground">
           Terms
         </Link>
-        <Link href="#" className="hover:text-foreground">
+        <Link href="/privacy" className="hover:text-foreground">
           Privacy Policy
         </Link>
         <a
