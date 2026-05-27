@@ -45,3 +45,4 @@ Thumbs.db
 
 # turbo / cache
 .turbo
+.env*
