@@ -4,7 +4,7 @@ import {
   Tag,
   ArrowUpDown,
   GitBranch,
-  HardDrive,
+  CloudUpload,
 } from "lucide-react"
 
 const ops = [
@@ -17,32 +17,32 @@ const ops = [
   {
     icon: FileText,
     title: "Bulk Rename Templates",
-    value: "Fix messy names",
-    description: "Clean filenames in seconds.",
+    value: "Batch renaming files",
+    description: "Fix filenames in seconds.",
   },
   {
     icon: Tag,
     title: "Sidecar Metadata",
     value: "Tag and describe",
-    description: "Find anything later.",
+    description: "Your metadata matters.",
   },
   {
     icon: ArrowUpDown,
     title: "Transfer Queue",
     value: "Reliable uploads",
-    description: "Transfers that never fail.",
+    description: "Transfers under controle.",
   },
   {
     icon: GitBranch,
     title: "Version Control",
-    value: "Track changes",
-    description: "Know what changed.",
+    value: "See all versions",
+    description: "Don't loose changes.",
   },
   {
-    icon: HardDrive,
+    icon: CloudUpload,
     title: "Smart Cache",
-    value: "Offline access",
-    description: "Work without internet.",
+    value: "Render and upload",
+    description: "Automatically. Don't wait.",
   },
 ]
 

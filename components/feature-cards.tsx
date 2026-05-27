@@ -10,7 +10,7 @@ const features = [
   {
     icon: Eye,
     outcome: "See inside your cloud",
-    how: "Auto-generated thumbnails and waveforms replace cryptic filenames.",
+    how: "Auto-generated thumbnails replace cryptic filenames.",
     proof: "Preview before you download.",
   },
   {

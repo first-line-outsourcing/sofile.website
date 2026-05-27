@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { Shield, Lock, Eye, Key } from "lucide-react"
+import { Shield, Lock, Eye, Key, Fingerprint } from "lucide-react"
 
 const providers = [
   { name: "AWS S3", src: "/images/icons/icon_awss3.svg" },
@@ -10,8 +10,8 @@ const providers = [
 ]
 
 const securityPoints = [
-  { icon: Lock, text: "Credentials stay on your machine" },
-  { icon: Eye, text: "Read-only mode prevents accidental changes" },
+  { icon: Lock, text: "AES-256 encryption" },
+  { icon: Fingerprint, text: "OAuth2-powered authentication. Your identity stays yours." },
   { icon: Key, text: "Direct API access — your data never passes through us" },
 ]
 
@@ -46,7 +46,7 @@ export function TrustLogos() {
             Direct connection via official APIs. <span className="text-muted-foreground">We don't store your files — we just make them visible.</span>
           </h3>
           <p className="mt-3 text-sm text-muted-foreground">
-            Files stay in your cloud. Credentials stay on your machine. We only provide the interface.
+            Files stay in your cloud. Credentials are encrypted. We only provide the interface.
           </p>
         </div>
 
