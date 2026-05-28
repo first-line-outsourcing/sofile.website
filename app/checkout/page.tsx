@@ -1,39 +1,46 @@
-"use client"
+"use client";
 
-import { useEffect, useRef } from "react"
-import { useSearchParams } from "next/navigation"
-import { Suspense } from "react"
-import Link from "next/link"
-import Image from "next/image"
-import { Button } from "@/components/ui/button"
-import { AlertCircle, ExternalLink } from "lucide-react"
+import { useEffect, useRef } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { AlertCircle, ExternalLink } from "lucide-react";
+import {
+  initializePaddle,
+  CheckoutEventNames,
+  type Paddle,
+} from "@paddle/paddle-js";
 
 const TRUST_TEXT =
-  "Payments are securely processed by Paddle, our merchant of record. Taxes, invoices, refunds, and payment processing are handled by Paddle."
+  "Payments are securely processed by Paddle, our merchant of record. Taxes, invoices, refunds, and payment processing are handled by Paddle.";
 
 function useIsPreview(): boolean {
-  const searchParams = useSearchParams()
-  return searchParams.get("preview") === "true"
+  const searchParams = useSearchParams();
+  return searchParams.get("preview") === "true";
 }
 
 /** Read transaction id from any of the supported query param names. */
 function useTransactionId(): string | null {
-  const searchParams = useSearchParams()
+  const searchParams = useSearchParams();
   return (
     searchParams.get("transaction_id") ??
     searchParams.get("transactionId") ??
     searchParams.get("_ptxn") ??
     searchParams.get("txn") ??
     null
-  )
+  );
 }
 
 function TrustBlock() {
   return (
     <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] px-5 py-4 text-left">
-      <p className="text-xs leading-relaxed text-muted-foreground">{TRUST_TEXT}</p>
+      <p className="text-xs leading-relaxed text-muted-foreground">
+        {TRUST_TEXT}
+      </p>
     </div>
-  )
+  );
 }
 
 function CheckoutFooter() {
@@ -60,7 +67,7 @@ function CheckoutFooter() {
         </Link>
       </nav>
     </footer>
-  )
+  );
 }
 
 function CheckoutPreview() {
@@ -85,7 +92,9 @@ function CheckoutPreview() {
           </div>
           <div className="flex justify-between gap-4">
             <dt className="text-muted-foreground">Billing</dt>
-            <dd className="font-medium text-foreground">Monthly subscription</dd>
+            <dd className="font-medium text-foreground">
+              Monthly subscription
+            </dd>
           </div>
         </dl>
       </div>
@@ -111,33 +120,63 @@ function CheckoutPreview() {
         </Button>
       </div>
     </div>
-  )
+  );
 }
 
 function CheckoutInner() {
-  const isPreview = useIsPreview()
-  const transactionId = useTransactionId()
-  const opened = useRef(false)
+  const isPreview = useIsPreview();
+  const transactionId = useTransactionId();
+  const router = useRouter();
+  const paddleRef = useRef<Paddle | undefined>(undefined);
+  const completedRef = useRef(false);
+  const opened = useRef(false);
+
+  function openOverlay(paddle: Paddle, txnId: string) {
+    paddle.Checkout.open({
+      transactionId: txnId,
+      settings: {
+        displayMode: "overlay",
+        successUrl: `${window.location.origin}/checkout/success`,
+      },
+    });
+  }
 
   useEffect(() => {
-    if (isPreview) return
-    if (!transactionId || opened.current) return
-    opened.current = true
+    if (isPreview || !transactionId) return;
 
-    // TODO: replace with your real Paddle client-side token
-    // Reference: https://developer.paddle.com/paddlejs/overview
-    // window.Paddle.Setup({ token: "live_xxx" })
-    // window.Paddle.Checkout.open({
-    //   transactionId,
-    //   settings: {
-    //     successUrl: `${window.location.origin}/checkout/success`,
-    //   },
-    // })
-    console.info("[Checkout] would open Paddle overlay for transaction:", transactionId)
-  }, [transactionId, isPreview])
+    const token = process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN;
+    if (!token) {
+      console.error("[Checkout] NEXT_PUBLIC_PADDLE_CLIENT_TOKEN is not set");
+      return;
+    }
+
+    initializePaddle({
+      environment: token.includes("test") ? "sandbox" : "production",
+      token,
+      eventCallback(event) {
+        if (event.name === CheckoutEventNames.CHECKOUT_COMPLETED) {
+          completedRef.current = true;
+        }
+        if (
+          event.name === CheckoutEventNames.CHECKOUT_CLOSED &&
+          !completedRef.current
+        ) {
+          router.push("/checkout/cancel");
+        }
+      },
+    }).then((paddle) => {
+      if (!paddle) return;
+      paddleRef.current = paddle;
+      if (!opened.current) {
+        opened.current = true;
+        openOverlay(paddle, transactionId);
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [transactionId, isPreview]);
 
   if (isPreview) {
-    return <CheckoutPreview />
+    return <CheckoutPreview />;
   }
 
   if (!transactionId) {
@@ -158,7 +197,7 @@ function CheckoutInner() {
           <Link href="/">Return to Sofile</Link>
         </Button>
       </div>
-    )
+    );
   }
 
   return (
@@ -177,8 +216,10 @@ function CheckoutInner() {
         className="mt-6 border-white/15 bg-transparent text-foreground hover:bg-white/[0.04]"
         variant="outline"
         onClick={() => {
-          opened.current = false
-          window.location.reload()
+          if (paddleRef.current && transactionId) {
+            completedRef.current = false;
+            openOverlay(paddleRef.current, transactionId);
+          }
         }}
       >
         Reopen checkout
@@ -188,7 +229,7 @@ function CheckoutInner() {
         <TrustBlock />
       </div>
     </div>
-  )
+  );
 }
 
 export default function CheckoutPage() {
@@ -221,5 +262,5 @@ export default function CheckoutPage() {
 
       <CheckoutFooter />
     </div>
-  )
+  );
 }
